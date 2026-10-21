@@ -2,13 +2,20 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 /**
- * 本地开发与本地预览配置。
- * 不设置 `base`，使用 Vite 默认的 '/'：开发服务器与 `npm run preview` 均以根路径提供服务，
- * 本项目为单页应用、无前端路由，不存在刷新 404 问题。
- * 数据文件通过 `import.meta.env.BASE_URL` 拼接后 fetch，本地开发与预览均可正常加载。
+ * 本地开发 + GitHub Pages 双场景配置。
+ *
+ * - 本地 `npm run dev` / `npm run preview` / `npm run build`：默认 `base = '/'`，根路径提供。
+ * - GitHub Pages 部署：在环境变量 `GITHUB_PAGES=true` 时 `base` 切换到 `/<repo>/`，
+ *   项目仓库路径 `/aigc_data_dashboard/` 下也能正常加载主资源与 `public/data/*.json`。
+ *
+ * 路由说明：本项目用普通锚点跳转（#sec-eval / #sec-supply …），不依赖前端路由，
+ * 因此 GH Pages 不需要 404 fallback 也能在不同路径下刷新同一 index.html。
  */
+const isGhPages = process.env.GITHUB_PAGES === 'true';
+
 export default defineConfig({
   plugins: [react()],
+  base: isGhPages ? '/aigc_data_dashboard/' : '/',
   server: {
     port: 5173,
     open: false,

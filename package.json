@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "AIGC生成数据看板",
+  "homepage": "https://DylanPattinson.github.io/aigc_data_dashboard/",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
